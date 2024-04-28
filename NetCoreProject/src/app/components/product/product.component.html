@@ -1,6 +1,16 @@
 <div *ngIf="dataLoaded == false" class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
+
+  <div class="mb-3">
+    <label for="txtSearchProduct" class="form-label">Product Name</label>
+    <input type="text" [(ngModel)]="filterText" class="form-control" id="txtSearchProduct" placeholder="Product Name">
+  </div>
+
+  <div *ngIf="filterText.length>2" class="alert alert-success">
+    You have searched for "{{filterText}}".
+  </div>
+
 <table *ngIf="dataLoaded == true" class="table">
     <thead>
         <tr>
@@ -8,14 +18,16 @@
             <th>Product Name</th>
             <th>Category Id</th>
             <th>Unit Price</th>
+            <th>Unit Price(Vat Added)</th>
             <th>Units in Stock</th>
         </tr>
     </thead>
-    <tr *ngFor="let product of products">
+    <tr *ngFor="let product of products | filterPipe:filterText">
         <td>{{product.productId}}</td>
-        <td>{{product.productName}}</td>
+        <td>{{product.productName | uppercase}}</td>
         <td>{{product.categoryId}}</td>
-        <td>{{product.unitPrice}}</td>
+        <td>{{product.unitPrice | currency }}</td>
+        <td>{{product.unitPrice | vatAdded:10 | currency}}</td>
         <td>{{product.unitsInStock}}</td>
     </tr>
 </table>
