@@ -18,7 +18,7 @@ export const appConfig: ApplicationConfig = {
       ToastrModule.forRoot({
         positionClass:"toast-bottom-right"
       }),
-      BrowserAnimationsModule,
+      BrowserAnimationsModule
     )
   ]
 };
