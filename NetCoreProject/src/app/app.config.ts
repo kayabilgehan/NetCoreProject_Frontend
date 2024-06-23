@@ -4,21 +4,26 @@ import { BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withFetch, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { authInterceptor } from './interceptors/auth.interceptor';
+import { loginGuard } from './guards/login.guard';
 
 export const appConfig: ApplicationConfig = {
     providers: [
     provideRouter(routes), 
     provideClientHydration(), 
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
     provideAnimations(),
     importProvidersFrom(
       ToastrModule.forRoot({
         positionClass:"toast-bottom-right"
       }),
-      BrowserAnimationsModule
+      BrowserAnimationsModule,
+    ),
+    provideHttpClient(
+      withInterceptors([authInterceptor])
     )
   ]
 };

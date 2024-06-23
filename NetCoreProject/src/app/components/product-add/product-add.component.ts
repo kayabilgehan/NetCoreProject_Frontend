@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, FormControl, Validators  } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators  } from '@angular/forms';
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
 import { ToastrService } from 'ngx-toastr';
@@ -38,11 +38,13 @@ export class ProductAddComponent {
       this.productService.add(productModel).subscribe(data => {
         this.toastrService.success("Product added.", "Success");
       }, responseError => {
-        console.log(responseError);
-        if(responseError.error.Errors.length > 0){
+        if(typeof localStorage !== 'undefined' && responseError.error.Errors.length > 0){
           for (let i = 0; i < responseError.error.Errors.length; i++) {
             this.toastrService.error(responseError.error.Errors[i].ErrorMessage, "Error");
           }
+        }
+        else {
+          this.toastrService.error(responseError.message, "Error");
         }
       });
     }
